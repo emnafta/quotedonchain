@@ -7,8 +7,9 @@ import { Chain, ChainLogo } from "./ChainLogo";
 interface BuildCardProps {
   chain: Chain;
   title: string;
-  slug: string; // full path, e.g. "/node-runner-pc/polkadot/neon-relay-ranch"
+  slug: string;
   description?: string;
+  previewVideo?: string;
   tier?: "Base" | "Upgraded";
 }
 
@@ -21,10 +22,13 @@ export function BuildCard({
   slug,
   description,
   tier,
+  previewVideo,    // <-- IMPORTANT
 }: BuildCardProps) {
   return (
-    <div className="group rounded-3xl border border-white/10 bg-black/40 p-5 shadow-lg shadow-black/40 backdrop-blur-md">
-      <div className="flex items-center gap-4">
+    <div className="relative group rounded-3xl border border-white/10 bg-black/40 p-5 shadow-lg shadow-black/40 backdrop-blur-md overflow-hidden">
+      
+      {/* CARD CONTENT */}
+      <div className="flex items-center gap-4 relative z-20">
         <ChainLogo chain={chain} size={56} />
         <div className="flex-1">
           <div className="flex items-center justify-between gap-2">
@@ -41,7 +45,7 @@ export function BuildCard({
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-3 text-xs">
+      <div className="mt-4 flex items-center justify-between gap-3 text-xs relative z-20">
         <Link
           href={slug}
           className="rounded-full bg-white text-black px-4 py-1.5 font-medium hover:bg-neutral-200 transition"
@@ -58,6 +62,22 @@ export function BuildCard({
           View on Quoted →
         </a>
       </div>
+
+      {/* HOVER VIDEO LAYER */}
+      {previewVideo && (
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src={previewVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+      )}
     </div>
   );
 }

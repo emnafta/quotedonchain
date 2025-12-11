@@ -1,11 +1,11 @@
 // app/node-runner-pc/page.tsx
-import { BuildCard } from "@/components/BuildCard";
 import { ChainLogo } from "@/components/ChainLogo";
-import { BuildSampleVideo } from "@/components/BuildSampleVideo";
+import { BuildCard } from "@/components/BuildCard";
 
 export default function NodeRunnerPcPage() {
   return (
     <div className="space-y-10">
+      {/* Hero */}
       <section className="rounded-3xl bg-black/60 p-8 shadow-xl shadow-black/40 backdrop-blur-md">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -26,90 +26,140 @@ export default function NodeRunnerPcPage() {
         </div>
       </section>
 
-      {/* Polkadot builds */}
+      {/* POLKADOT */}
       <section className="space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.22em] text-neutral-300">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-300">
           Polkadot builds
         </h2>
+        <p className="text-sm text-neutral-200">
+          Quiet, efficient rigs tuned for Polkadot validators, parachain
+          collators, and full nodes. Built to sit in your home or studio
+          without sounding like a datacenter.
+        </p>
 
-        <BuildSampleVideo
-          src="/video/polkadot-sample.mp4"
-          caption="Sample Polkadot node-ready build — minimalist chassis with subtle magenta accents."
-        />
+        {/* Cards (descriptions ABOVE video) */}
+        <div className="grid gap-6 md:grid-cols-2">
+<BuildCard
+  chain="polkadot"
+  title="Neon Relay Ranch"
+  slug="/node-runner-pc/polkadot/neon-relay-ranch"
+  description="Base Polkadot validator rig—quiet, efficient, and ready for relay chain + parachain workloads."
+  tier="Base"
+  previewVideo="/video/polkadot-sample.mp4"   // 👈 ADD THIS
+/>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <BuildCard
-            chain="polkadot"
-            title="Neon Relay Ranch"
-            slug="/node-runner-pc/polkadot/neon-relay-ranch"
-            description="Base Polkadot validator rig—quiet, efficient, and ready for relay chain duty."
-            tier="Base"
-          />
-          <BuildCard
-            chain="polkadot"
-            title="Versace Validator"
-            slug="/node-runner-pc/polkadot/versace-validator"
-            description="Upgraded RAM, storage, and thermals for validators who never sleep."
-            tier="Upgraded"
-          />
+<BuildCard
+  chain="polkadot"
+  title="Versace Validator"
+  slug="/node-runner-pc/polkadot/versace-validator"
+  description="Upgraded RAM, storage, and thermals for whales who never sleep and nodes that can’t go down."
+  tier="Upgraded"
+  previewVideo="/video/polkadot-sample.mp4"   // 👈 ADD THIS
+/>
+
+        </div>
+
+        {/* Polkadot sample video BELOW cards */}
+        <div className="mt-6 rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_12px_rgba(255,46,168,0.25)]">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover"
+          >
+            <source src="/video/polkadot-sample.mp4" type="video/mp4" />
+          </video>
         </div>
       </section>
 
-      {/* Ethereum builds */}
+      {/* ETHEREUM */}
       <section className="space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.22em] text-neutral-300">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-300">
           Ethereum builds
         </h2>
+        <p className="text-sm text-neutral-200">
+          Balanced boxes for running execution + consensus clients, local RPC
+          endpoints, and validator setups with sane thermals and uptime.
+        </p>
 
-        <BuildSampleVideo
-          src="/video/ethereum-sample.mp4"
-          caption="Sample Ethereum node build — slate-gray minimal tower with cool ice-blue lighting."
-        />
+        {/* Cards (descriptions ABOVE video) */}
+        <div className="grid gap-6 md:grid-cols-2">
+<BuildCard
+  chain="ethereum"
+  title="Gas Guzzler Glacier"
+  slug="/node-runner-pc/ethereum/gas-guzzler-glacier"
+  description="Steady execution + consensus performance with room for extra services on the side."
+  tier="Base"
+  previewVideo="/video/ethereum-sample.mp4"   // 👈 ADD THIS
+/>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <BuildCard
-            chain="ethereum"
-            title="Glacier Gasworks"
-            slug="/node-runner-pc/ethereum/gas-guzzler-glacier"
-            description="Chilled-out execution + consensus box built for steady mainnet cruising."
-            tier="Base"
-          />
-          <BuildCard
-            chain="ethereum"
-            title="Merkle Mansion"
-            slug="/node-runner-pc/ethereum/merkle-mansion"
-            description="Extra cores, extra NVMe, extra everything for your personal rollup empire."
-            tier="Upgraded"
-          />
+<BuildCard
+  chain="ethereum"
+  title="Merkle Mansion"
+  slug="/node-runner-pc/ethereum/merkle-mansion"
+  description="Extra cores, extra NVMe, extra everything for your personal rollup empire and infra stack."
+  tier="Upgraded"
+  previewVideo="/video/ethereum-sample.mp4"   // 👈 ADD THIS
+/>
+        </div>
+
+        {/* Ethereum sample video BELOW cards */}
+        <div className="mt-6 rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_12px_rgba(128,0,255,0.25)]">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover"
+          >
+            <source src="/video/ethereum-sample.mp4" type="video/mp4" />
+          </video>
         </div>
       </section>
 
-      {/* Solana builds */}
+      {/* SOLANA */}
       <section className="space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.22em] text-neutral-300">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-300">
           Solana builds
         </h2>
+        <p className="text-sm text-neutral-200">
+          High-throughput rigs for Solana RPC nodes, indexers, and
+          validator-class performance—tuned for fast disks and serious RAM.
+        </p>
 
-        <BuildSampleVideo
-          src="/video/solana-sample.mp4"
-          caption="Sample Solana validator build — ultra-black tower with subtle Solana gradient strip."
-        />
+        {/* Cards (descriptions ABOVE video) */}
+        <div className="grid gap-6 md:grid-cols-2">
+<BuildCard
+  chain="solana"
+  title="Turbo Lagoon"
+  slug="/node-runner-pc/solana/turbo-lagoon"
+  description="Entry Solana node box with fast NVMe and enough RAM for serious RPC work."
+  tier="Base"
+  previewVideo="/video/solana-sample.mp4"   // 👈 ADD THIS
+/>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <BuildCard
-            chain="solana"
-            title="Photon Lagoon"
-            slug="/node-runner-pc/solana/turbo-lagoon"
-            description="Meets recommended validator specs with extra headroom for throughput."
-            tier="Base"
-          />
-          <BuildCard
-            chain="solana"
-            title="Laser Lemon Lambo"
-            slug="/node-runner-pc/solana/laser-lemon-lambo"
-            description="Full-send Solana box: maxed CPU, RAM, and I/O for degen-level performance."
-            tier="Upgraded"
-          />
+<BuildCard
+  chain="solana"
+  title="Hyperion Halo"
+  slug="/node-runner-pc/solana/hyperion-halo"
+  description="Upgraded Solana rig for validators and power users."
+  tier="Upgraded"
+  previewVideo="/video/solana-sample.mp4"   // 👈 ADD THIS
+/>
+        </div>
+
+        {/* Solana sample video BELOW cards */}
+        <div className="mt-6 rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_12px_rgba(0,255,255,0.25)]">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover"
+          >
+            <source src="/video/solana-sample.mp4" type="video/mp4" />
+          </video>
         </div>
       </section>
     </div>
