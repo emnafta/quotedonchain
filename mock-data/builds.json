@@ -1,0 +1,70 @@
+{
+  "polkadot": [
+    {
+      "id": "polkadot-neon-relay",
+      "name": "Neon Relay Rodeo",
+      "variant": "Home Lab Chrome Edition",
+      "estPriceCents": 289999,
+      "currency": "CAD",
+      "tags": ["Quiet", "Low power", "2TB NVMe"],
+      "artworkTheme": "Hot pink chrome front panel, white polka dots, soft purple underglow, Polkadot glyph on the side",
+      "quotedDeepLink": "https://quoted.tech/desktops/custom-build?preset=polkadot-neon-relay"
+    },
+    {
+      "id": "polkadot-cosmic-parachain",
+      "name": "Cosmic Parachain Cruiser",
+      "variant": "Datacenter Ice Edition",
+      "estPriceCents": 349999,
+      "currency": "CAD",
+      "tags": ["ECC-ready", "Zen4 8-core", "High airflow"],
+      "artworkTheme": "Matte black shell with chrome rails, tiny neon orbs flowing like parachains across the side panel",
+      "quotedDeepLink": "https://quoted.tech/desktops/custom-build?preset=polkadot-cosmic-parachain"
+    }
+  ],
+
+  "ethereum": [
+    {
+      "id": "ethereum-diamond-drip",
+      "name": "Diamond Drip Validator",
+      "variant": "Midnight Ether Edition",
+      "estPriceCents": 259999,
+      "currency": "CAD",
+      "tags": ["32 GB RAM", "2TB NVMe", "Low noise"],
+      "artworkTheme": "Satin black case, glowing blue Ethereum diamonds climbing the front, subtle gold flecks in the vents",
+      "quotedDeepLink": "https://quoted.tech/desktops/custom-build?preset=ethereum-diamond-drip"
+    },
+    {
+      "id": "ethereum-gas-glitterbox",
+      "name": "Gas Glitterbox Deluxe",
+      "variant": "Validator Lounge Edition",
+      "estPriceCents": 319999,
+      "currency": "CAD",
+      "tags": ["64 GB RAM", "Redundant PSU", "Validator ready"],
+      "artworkTheme": "Pearl white case, iridescent purple blue gradient stripe with repeated Eth logo down the side",
+      "quotedDeepLink": "https://quoted.tech/desktops/custom-build?preset=ethereum-gas-glitterbox"
+    }
+  ],
+
+  "solana": [
+    {
+      "id": "solana-mango-turbo",
+      "name": "Mango Turbo Validator",
+      "variant": "Airflow Neon Edition",
+      "estPriceCents": 329999,
+      "currency": "CAD",
+      "tags": ["High airflow", "3TB NVMe", "Validator spec"],
+      "artworkTheme": "Gradient teal to purple bar across the front like the Solana logo, with subtle mango orange fans behind mesh",
+      "quotedDeepLink": "https://quoted.tech/desktops/custom-build?preset=solana-mango-turbo"
+    },
+    {
+      "id": "solana-aurora-jetstream",
+      "name": "Aurora Jetstream RPC",
+      "variant": "High IOPS Flight Edition",
+      "estPriceCents": 389999,
+      "currency": "CAD",
+      "tags": ["High IOPS", "4TB NVMe", "RPC workloads"],
+      "artworkTheme": "Dark glass panel with streaks of neon green and violet, like a Solana aurora trail across the side",
+      "quotedDeepLink": "https://quoted.tech/desktops/custom-build?preset=solana-aurora-jetstream"
+    }
+  ]
+}
