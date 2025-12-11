@@ -1,173 +1,195 @@
-import fs from "fs";
-import path from "path";
-import Link from "next/link";
+// app/nodes/page.tsx
+"use client";
 
-type Build = {
-  id: string;
-  name: string;
-  variant: string;
-  estPriceCents: number;
-  currency: string;
-  tags: string[];
-  artworkTheme: string;
-  quotedDeepLink: string;
-};
+import { useMemo, useState } from "react";
+import { homeNodeChains } from "@/mock-data/homeNodeChains";
 
-type ChainConfig = {
-  id: "polkadot" | "ethereum" | "solana";
-  name: string;
-  subtitle: string;
-  accentClass: string;
-  artworkGlowClass: string;
-};
-
-const chains: ChainConfig[] = [
-  {
-    id: "polkadot",
-    name: "Polkadot",
-    subtitle: "Relay-chain validators & full nodes",
-    accentClass: "text-pink-400",
-    artworkGlowClass: "from-pink-500 via-purple-500 to-sky-500"
-  },
-  {
-    id: "ethereum",
-    name: "Ethereum",
-    subtitle: "Staking validators & MEV-ready rigs",
-    accentClass: "text-emerald-400",
-    artworkGlowClass: "from-emerald-400 via-cyan-400 to-slate-300"
-  },
-  {
-    id: "solana",
-    name: "Solana",
-    subtitle: "High IOPS validators & RPC boxes",
-    accentClass: "text-sky-400",
-    artworkGlowClass: "from-sky-400 via-violet-500 to-fuchsia-500"
-  }
-];
-
-function getAllBuilds(): Record<string, Build[]> {
-  const filePath = path.join(process.cwd(), "mock-data", "builds.json");
-  const raw = fs.readFileSync(filePath, "utf8");
-  const data = JSON.parse(raw);
-  return data as Record<string, Build[]>;
-}
-
-function formatPrice(cents: number, currency: string) {
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency
-  }).format(cents / 100);
-}
+type SortOption = "name" | "apr" | "hardware";
 
 export default function NodesPage() {
-  const allBuilds = getAllBuilds();
+  const [search, setSearch] = useState("");
+  const [onlyHomeValidators, setOnlyHomeValidators] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("name");
+
+  const filteredChains = useMemo(() => {
+    return homeNodeChains
+      .filter((chain) => {
+        if (onlyHomeValidators && chain.validatorHomeFeasible !== "yes") {
+          return false;
+        }
+        if (!search.trim()) return true;
+
+        const q = search.toLowerCase();
+        return (
+          chain.name.toLowerCase().includes(q) ||
+          chain.category.toLowerCase().includes(q) ||
+          chain.notes.toLowerCase().includes(q)
+        );
+      })
+      .sort((a, b) => {
+        if (sortBy === "name") {
+          return a.name.localeCompare(b.name);
+        }
+        if (sortBy === "apr") {
+          return b.aprSort - a.aprSort;
+        }
+        if (sortBy === "hardware") {
+          return a.hardwareScore - b.hardwareScore;
+        }
+        return 0;
+      });
+  }, [search, onlyHomeValidators, sortBy]);
 
   return (
-    <div className="min-h-screen text-white py-6">
-      <div className="space-y-8">
-        <header className="space-y-3">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-500">
-            Multi-chain catalogue
-          </p>
-          <h1 className="text-3xl font-semibold">Node & Validator Builds</h1>
-          <p className="text-sm text-zinc-300 max-w-2xl">
-            Pick a network and start from a curated hardware profile. Each card
-            shows two riffed-out builds plus a visual mood for how the tower
-            could look on your desk.
-          </p>
-        </header>
+    <div className="space-y-8">
+      {/* Hero / intro */}
+      <section className="rounded-3xl bg-black/60 p-8 shadow-xl shadow-black/40 backdrop-blur-md">
+        <h1 className="text-2xl font-semibold tracking-tight text-white">
+          Node Compatibility Matrix
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm text-neutral-200">
+          Compare 25 major networks that can be run from home—either as full
+          nodes or validators. Use this matrix to match a Quoted On-chain rig
+          to the chains you care about: Polkadot, Ethereum, Solana, Cosmos, and
+          more.
+        </p>
+      </section>
 
-        <section className="grid gap-6 md:grid-cols-3">
-          {chains.map((chain) => {
-            const buildsForChain = allBuilds[chain.id] || [];
-            const firstTwo = buildsForChain.slice(0, 2);
+      {/* Controls */}
+      <section className="rounded-3xl bg-black/60 p-4 shadow-lg shadow-black/40 backdrop-blur-md">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-1 items-center gap-2">
+            <label className="w-full text-xs text-neutral-300">
+              <span className="mb-1 block font-semibold uppercase tracking-[0.18em]">
+                Search chains
+              </span>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Polkadot, Solana, Cosmos, DePIN..."
+                className="w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none ring-0 placeholder:text-neutral-500 focus:border-white/40"
+              />
+            </label>
+          </div>
 
-            return (
-              <div
-                key={chain.id}
-                className="border border-zinc-800 bg-zinc-950/80 rounded-2xl p-5 flex flex-col gap-4"
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2 text-xs text-neutral-200">
+              <input
+                type="checkbox"
+                checked={onlyHomeValidators}
+                onChange={(e) => setOnlyHomeValidators(e.target.checked)}
+                className="h-3 w-3 rounded border border-neutral-500 bg-black/40"
+              />
+              <span>Show only home-feasible validators</span>
+            </label>
+
+            <label className="flex items-center gap-2 text-xs text-neutral-200">
+              <span className="uppercase tracking-[0.18em] text-neutral-400">
+                Sort
+              </span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="rounded-xl border border-white/10 bg-black/40 px-2 py-1 text-xs text-white outline-none"
               >
-                {/* Chain header */}
-                <div>
-                  <p
-                    className={`text-[11px] uppercase tracking-[0.2em] mb-1 ${chain.accentClass}`}
-                  >
+                <option value="name">Alphabetical</option>
+                <option value="apr">Earning potential (APR)</option>
+                <option value="hardware">Hardware light → heavy</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      {/* Table */}
+      <section className="overflow-hidden rounded-3xl bg-black/60 shadow-xl shadow-black/40 backdrop-blur-md">
+        <div className="max-h-[70vh] overflow-auto">
+          <table className="min-w-full text-left text-sm text-neutral-100">
+            <thead className="sticky top-0 bg-black/80 text-xs uppercase tracking-[0.16em] text-neutral-400 backdrop-blur">
+              <tr>
+                <th className="px-4 py-3">Chain</th>
+                <th className="px-4 py-3">Category</th>
+                <th className="px-4 py-3">Stake (Validator)</th>
+                <th className="px-4 py-3">Hardware</th>
+                <th className="px-4 py-3">Home Node</th>
+                <th className="px-4 py-3">Home Validator</th>
+                <th className="px-4 py-3">Est. Earning Potential</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredChains.map((chain) => (
+                <tr
+                  key={chain.id}
+                  className="border-t border-white/5 bg-black/30 hover:bg-white/5"
+                >
+                  <td className="px-4 py-3 font-medium text-white">
                     {chain.name}
-                  </p>
-                  <h2 className="text-sm font-semibold mb-1">
-                    {chain.subtitle}
-                  </h2>
-                  <p className="text-xs text-zinc-400">
-                    Two signature builds, both loud in spec and louder in style.
-                  </p>
-                </div>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-neutral-300">
+                    {chain.category}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-neutral-200">
+                    {chain.stakeRequirement}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-neutral-200">
+                    {chain.hardwareSummary}
+                  </td>
+                  <td className="px-4 py-3 text-xs">
+                    {chain.homeNodeFeasible ? (
+                      <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300">
+                        Yes
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-red-300">
+                        No
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-xs">
+                    {chain.validatorHomeFeasible === "yes" && (
+                      <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-300">
+                        Yes
+                      </span>
+                    )}
+                    {chain.validatorHomeFeasible === "partial" && (
+                      <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-amber-300">
+                        Partial
+                      </span>
+                    )}
+                    {chain.validatorHomeFeasible === "no" && (
+                      <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-red-300">
+                        No
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-neutral-100">
+                    {chain.aprRange}
+                    <span className="ml-1 text-[0.7rem] text-neutral-400">
+                      est., not guaranteed
+                    </span>
+                    <div className="mt-1 text-[0.7rem] text-neutral-500">
+                      {chain.notes}
+                    </div>
+                  </td>
+                </tr>
+              ))}
 
-                {/* Artwork / preview space */}
-                <div className="relative rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900/80 h-32 mb-1">
-                  <div
-                    className={`absolute -inset-10 bg-gradient-to-r ${chain.artworkGlowClass} opacity-40 blur-3xl`}
-                  />
-                  <div className="relative h-full flex items-center justify-between px-4">
-                    <div className="space-y-1 text-xs">
-                      <p className="text-zinc-200">Case artwork mood</p>
-                      <p className="text-[11px] text-zinc-300 max-w-[12rem]">
-                        {firstTwo[0]?.artworkTheme ??
-                          "Define artworkTheme in builds.json"}
-                      </p>
-                    </div>
-                    <div className="h-16 w-16 rounded-xl border border-zinc-700 bg-black/60 flex items-center justify-center text-[10px] text-zinc-300">
-                      Preview
-                      <br />
-                      art slot
-                    </div>
-                  </div>
-                </div>
-
-                {/* Builds list */}
-                <div className="space-y-3">
-                  {firstTwo.map((b) => (
-                    <div
-                      key={b.id}
-                      className="border border-zinc-800 rounded-xl px-3 py-2 bg-zinc-900/70"
-                    >
-                      <p className="text-xs font-semibold">{b.name}</p>
-                      <p className="text-[11px] text-zinc-400 mb-1">
-                        {b.variant} · {formatPrice(b.estPriceCents, b.currency)}
-                      </p>
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {b.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-2 py-[2px] rounded-full border border-zinc-700 text-[10px] text-zinc-200"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="flex items-center justify-between text-[11px]">
-                        <a
-                          href={b.quotedDeepLink}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-pink-400 hover:text-pink-300"
-                        >
-                          View on Quoted →
-                        </a>
-                        <Link
-                          href={`/customize/${b.id}`}
-                          className="text-zinc-300 hover:text-white"
-                        >
-                          Customize case →
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </section>
-      </div>
+              {filteredChains.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-4 py-8 text-center text-xs text-neutral-400"
+                  >
+                    No chains match your filters yet. Try clearing the search or
+                    turning off the validator filter.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }

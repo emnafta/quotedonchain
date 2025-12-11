@@ -1,33 +1,15 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+import { Inter } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
   title: "Quoted On-chain",
-  description:
-    "Quoted On-chain: premium node-ready PCs for Polkadot, Ethereum, and Solana, powered by Quoted Tech.",
-  openGraph: {
-    title: "Quoted On-chain – Node-ready PCs by Quoted Tech",
-    description:
-      "Minimalist, premium PC builds tuned for Polkadot, Ethereum, and Solana nodes.",
-    images: [
-      {
-        url: "/logos/quotedtech.jpg",
-        width: 800,
-        height: 800,
-        alt: "Quoted Tech logo",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Quoted On-chain – Node-ready PCs by Quoted Tech",
-    description:
-      "Minimalist, premium PC builds tuned for Polkadot, Ethereum, and Solana nodes.",
-    images: ["/logos/quotedtech.jpg"],
-  },
+  description: "Minimalist node-runner rigs for Polkadot, Ethereum, Solana and beyond.",
 };
 
 export default function RootLayout({
@@ -37,64 +19,76 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-black text-neutral-50">
-        {/* Video background */}
-        <video
-          className="fixed inset-0 -z-20 h-full w-full object-cover"
-          src="/video/gbcvideo.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-        {/* Dark overlay to control brightness / contrast */}
-        <div className="fixed inset-0 -z-10 bg-black/65 backdrop-blur-sm" />
+      <body className={inter.className + " bg-black text-white"}>
+        <div className="relative min-h-screen overflow-hidden">
+          {/* Background video */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="fixed inset-0 h-full w-full object-cover brightness-[0.35] z-[-2]"
+          >
+            <source src="/video/gbcvideo.mp4" type="video/mp4" />
+          </video>
 
-        <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-10 pt-6">
-          {/* Top nav */}
-          <header className="mb-8 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/logos/quotedtech.jpg"
-                alt="Quoted Tech logo"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <Link
-                href="/"
-                className="text-lg font-semibold tracking-tight text-white"
-              >
-                Quoted On-chain
-              </Link>
-            </div>
+          {/* Dark overlay for contrast */}
+          <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/85 z-[-1]" />
 
-            <nav className="flex items-center gap-4 text-sm text-neutral-200">
-              <Link href="/" className="hover:text-white">
-                Home
-              </Link>
-              <Link href="/node-runner-pc" className="hover:text-white">
-                Builds
-              </Link>
-              <a
-                href="https://quoted.tech/?utm_source=x&utm_medium=post&utm_campaign=polkadot"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-full border border-white/30 px-3 py-1 hover:bg-white hover:text-black transition"
-              >
-                View on Quoted
-              </a>
-            </nav>
-          </header>
+          {/* Foreground content */}
+          <div className="relative z-10 flex min-h-screen flex-col">
+            <header className="border-b border-white/10 bg-black/50 backdrop-blur">
+              <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-4 md:px-8">
+                <Link href="/" className="flex items-center gap-3">
+                  <Image
+                    src="/logos/quotedtech.jpg"
+                    alt="Quoted Tech logo"
+                    width={40}
+                    height={40}
+                    className="h-9 w-9 rounded-full border border-white/20 object-cover"
+                  />
+                  <div className="flex flex-col leading-tight">
+                    <span className="text-sm font-semibold text-white">
+                      Quoted On-chain
+                    </span>
+                    <span className="text-[0.65rem] uppercase tracking-[0.22em] text-neutral-400">
+                      Node runner rigs
+                    </span>
+                  </div>
+                </Link>
 
-          <main className="flex-1">{children}</main>
+                <nav className="flex items-center gap-4 text-xs font-medium text-neutral-200">
+                  <Link
+                    href="/node-runner-pc"
+                    className="hover:text-white transition"
+                  >
+                    Node runner PC
+                  </Link>
+                  <Link
+                    href="/nodes"
+                    className="hover:text-white transition"
+                  >
+                    Node matrix
+                  </Link>
+                </nav>
+              </div>
+            </header>
 
-          <footer className="mt-10 border-t border-white/10 pt-4 text-xs text-neutral-300">
-            <p>
-              © {new Date().getFullYear()} Quoted On-chain · Powered by Quoted
-              Tech.
-            </p>
-          </footer>
+            <main className="flex-1">
+              <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-8 md:px-8 lg:py-10">
+                {children}
+              </div>
+            </main>
+
+            <footer className="border-t border-white/10 bg-black/60 backdrop-blur">
+              <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 text-[0.7rem] text-neutral-400 md:px-8">
+                <span>© {new Date().getFullYear()} Quoted On-chain.</span>
+                <span className="hidden md:inline">
+                  Built for humans who actually run their own nodes.
+                </span>
+              </div>
+            </footer>
+          </div>
         </div>
       </body>
     </html>
